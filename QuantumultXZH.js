@@ -20,11 +20,13 @@ body.forEach((x, y, z) => {
 			case "script-":
 			if (x.match('echo')) {throw '脚本不支持通用'}
 				z[y - 1]?.match("#") && script.push(z[y - 1]);
-				let proto = x.match('proto.js') ? ',binary-body-mode=1' : '';
+				
+let requires =	x.match('-header') ? "0" : "1";
+let proto = x.match('proto.js') ? ',binary-body-mode=1' : '' ;
 				script.push(
 					x.replace(
 						/(\^?http[^\s]+)\surl\sscript-(response|request)[^\s]+\s(http.+\/(.+)\.js)/,
-						`$4 = type=http-$2,pattern=$1,requires-body=1${proto},max-size=0,script-path=$3,script-update-interval=0`,
+						`$4 = type=http-$2,pattern=$1,requires-body=${requires}${proto},max-size=0,script-path=$3,script-update-interval=0`,
 					),
 				);
 				break;
@@ -40,7 +42,7 @@ body.forEach((x, y, z) => {
 				break;
 
 			case "reject":
-				let jct = x.match(/reject?[^\s]+/)[0];
+				let jct = x.match(/[^\s]+/)[0];
 				let url = x.match(/\^?http[^\s]+/)?.[0];
 
 				if (jct === "reject-200") {
@@ -89,7 +91,7 @@ let op = x.match(/\sresponse-header/) ?
 			default:
 				if (type.match("url ")) {
 					z[y - 1]?.match("#") && URLRewrite.push(z[y - 1]);
-					URLRewrite.push(x.replace(/(\^?http[^\s]+).+(302|307).+(http.+)/, "$1 $3 $2"));
+					URLRewrite.push(x.replace(/([^\s]+).+(302|307).+(http.+)/, "$1 $3 $2"));
 				} else {
 					z[y - 1]?.match("#") && script.push(z[y - 1]);
 					script.push(
