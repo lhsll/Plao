@@ -6,15 +6,15 @@ Appstore Speed up download (By langkhach)
 DNSPod = type=dns,script-path=https://raw.githubusercontent.com/XOS/Config/Her/Surge/Script/DNSPod.js,script-update-interval=-1
 */
 
-const url = 'http://119.29.29.29/d?dn=' + $domain;
+const url = 'http://43.138.154.151:777/d?dn=' + $domain;
 if ($network.v4.primaryInterface === 'en0') {
   $httpClient.get(url, function (error, response, data) {
     if (error) {
-      $done({ server: '8.8.8.8' });
+      $done({ server: 'https://east.lele233.pro/cdn' });
     } else {
       $done({ addresses: data.split(';'), ttl: 600 });
     }
   });
 } else {
-  $done({ server: '8.8.8.8' });
+  $done({ server: 'https://east.lele233.pro/cdn' });
 }
